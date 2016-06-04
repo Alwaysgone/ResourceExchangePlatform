@@ -1,6 +1,7 @@
 package at.ac.tuwien.rep.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 
@@ -10,6 +11,7 @@ public class ResourceNomination {
 	private Resource resource;
 	private BigDecimal amount;
 	private ResourceDirection direction;
+	private List<ResourceNomination> matchedNominations;
 	
 	public String getId() {
 		return id;
@@ -41,5 +43,13 @@ public class ResourceNomination {
 
 	public void setDirection(ResourceDirection direction) {
 		this.direction = direction;
+	}
+
+	public List<ResourceNomination> getMatchedNominations() {
+		return matchedNominations;
+	}
+
+	public void setMatchedNominations(List<ResourceNomination> matchedNominations) {
+		this.matchedNominations = matchedNominations;
 	}
 }

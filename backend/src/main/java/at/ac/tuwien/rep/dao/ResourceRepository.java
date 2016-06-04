@@ -8,4 +8,5 @@ import at.ac.tuwien.rep.model.Resource;
 
 public interface ResourceRepository extends MongoRepository<Resource, String> {
 	List<Resource> findByName(String name);
+	List<Resource> findByNameIn(List<String> names);
 }
