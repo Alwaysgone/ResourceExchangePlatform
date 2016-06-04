@@ -13,7 +13,7 @@ public interface ResourceNominationRepository extends MongoRepository<ResourceNo
     WHERE EXISTS
         (SELECT spouseAuthor FROM Author spouseAuthor WHERE spouseAuthor = auth.spouse)
 	 */
-	@Query("SELECT DISTINCT n FROM ResourceNomination n WHERE NOT EXISTS"
-			+ " (SELECT nomination FROM ResourceAllocation)")
-	List<ResourceNomination> findAllByCustomQuery();
+//	@Query("SELECT DISTINCT n FROM ResourceNomination n WHERE NOT EXISTS"
+//			+ " (SELECT ra.nomination FROM ResourceAllocation ra WHERE ra.nomination=n)")
+//	List<ResourceNomination> findAllByCustomQuery();
 }

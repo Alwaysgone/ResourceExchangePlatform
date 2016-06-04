@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableAutoConfiguration
 @EnableMongoRepositories(basePackages="at.ac.tuwien.rep.dao")
 public class Main {
+	
 	public static void main(String[] args) {
 		SpringApplication.run(Main.class, args);
 	}

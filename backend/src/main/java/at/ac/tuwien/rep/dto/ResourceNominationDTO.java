@@ -4,8 +4,9 @@ import java.math.BigDecimal;
 
 public class ResourceNominationDTO {
 	private String id;
-	private ResourceDTO resource;
+	private String resource;
 	private BigDecimal amount;
+	private String unit;
 	private String direction;
 	
 	public String getId() {
@@ -16,11 +17,11 @@ public class ResourceNominationDTO {
 		this.id = id;
 	}
 	
-	public ResourceDTO getResource() {
+	public String getResource() {
 		return resource;
 	}
 	
-	public void setResource(ResourceDTO resource) {
+	public void setResource(String resource) {
 		this.resource = resource;
 	}
 
@@ -30,6 +31,14 @@ public class ResourceNominationDTO {
 
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
+	}
+	
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 
 	public String getDirection() {

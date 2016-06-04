@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 
-public class ResourceRequest {
+public class ResourceNominationAssociation {
 	@Id
 	private String id;
+	private String participant;
 	private List<ResourceNomination> nominations;
 	
 	public String getId() {
@@ -15,6 +16,14 @@ public class ResourceRequest {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+	
+	public String getParticipant() {
+		return participant;
+	}
+
+	public void setParticipant(String participant) {
+		this.participant = participant;
 	}
 	
 	public List<ResourceNomination> getNominations() {

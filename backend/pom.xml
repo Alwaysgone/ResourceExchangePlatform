@@ -16,6 +16,7 @@
 		<org.apache.maven.plugins.version>3.5.1</org.apache.maven.plugins.version>
 		<com.spotify.version>0.2.3</com.spotify.version>
 		<org.apache.jena.version>3.1.0</org.apache.jena.version>
+		<tec.units.version>0.8</tec.units.version>
 	</properties>
 
 	<repositories>
@@ -42,11 +43,16 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-<!-- 			<dependency> -->
-<!-- 				<groupId>org.apache.jena</groupId> -->
-<!-- 				<artifactId>jena-core</artifactId> -->
-<!-- 				<version>${org.apache.jena.version}</version> -->
-<!-- 			</dependency> -->
+			<dependency>
+				<groupId>tec.units</groupId>
+				<artifactId>unit-ri</artifactId>
+				<version>${tec.units.version}</version>
+			</dependency>
+			<!-- <dependency> -->
+			<!-- <groupId>org.apache.jena</groupId> -->
+			<!-- <artifactId>jena-core</artifactId> -->
+			<!-- <version>${org.apache.jena.version}</version> -->
+			<!-- </dependency> -->
 
 		</dependencies>
 	</dependencyManagement>
@@ -60,13 +66,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
-			<dependency>
-				<groupId>org.apache.jena</groupId>
-				<artifactId>apache-jena-libs</artifactId>
-				<version>${org.apache.jena.version}</version>
-<!-- 				<scope>import</scope> -->
-				<type>pom</type>
-			</dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>apache-jena-libs</artifactId>
+			<version>${org.apache.jena.version}</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>tec.units</groupId>
+			<artifactId>unit-ri</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
