@@ -2,25 +2,33 @@
 
 // Declare app level module which depends on filters, and services
 
-angular.module('myApp', [
-  'myApp.controllers',
-  'myApp.filters',
-  'myApp.services',
-  'myApp.directives'
+/*angular.module('app.config')
+  .value('app.config', {
+    basePath: 'http://127.0.0.1:8080/api' // Set your base path here
+  });*/
+angular.module('rep-frontend', [
+  //'app.config',
+  'ngRoute',
+  'ngAria',
+  'ngMaterial',
+  'rep-frontend.controllers',
+  'rep-frontend.filters',
+  'rep-frontend.services',
+  'rep-frontend.directives'
 ]).
 config(function ($routeProvider, $locationProvider) {
-  $routeProvider.
-    when('/view1', {
-      templateUrl: 'partials/partial1.html',
-      controller: 'MyCtrl1'
-    }).
-    when('/view2', {
-      templateUrl: 'partials/partial2.html',
-      controller: 'MyCtrl2'
-    }).
-    otherwise({
-      redirectTo: '/view1'
-    });
-
-  $locationProvider.html5Mode(true);
+	$locationProvider.hashPrefix('!');
+	$locationProvider.html5Mode(true);
+	$routeProvider
+	.when('/nominations', {
+		templateUrl: 'content/nominations.html',
+		controller: 'NominationController'
+	})
+	.when('/input', {
+		templateUrl: 'content/input.html',
+		controller: 'InputController'
+	})
+	.otherwise({
+		redirectTo: '/nominations'
+	});	
 });

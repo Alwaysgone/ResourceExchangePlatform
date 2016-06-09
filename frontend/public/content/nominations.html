@@ -1,0 +1,40 @@
+<div layout="column" ng-cloak="">
+	<md-content layout-padding="">
+		<form>
+			<md-input-container class="md-block">
+				<label>Filter:</label>
+				<input type="text" class="form-control" placeholder="Resource contains" ng-model="resourceFilter.resource">
+			</md-input-container>
+		</form>
+	</md-content>
+	<md-content layout-padding="">
+		<table id="NominationsTable" class="md-hue-1">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Resource</th>
+					<th>Quantity</th>
+					<th>Demand/Offer</th>
+					<th>Matched Resources</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="allocation in allocations | filter:resourceFilter | orderBy:['nomination.resource', 'nomination.amount'] track by allocation.id">
+					<td align="center">{{allocation.nomination.id}}</td>
+					<td align="center">{{allocation.nomination.resource}}</td>
+					<td align="center">{{allocation.nomination.amount}} {{allocation.nomination.unit}}</td>
+					<td align="center">{{allocation.nomination.direction}}</td>
+					<!-- TODO rangeFilter:this | ng-controller="NominationController" -->
+					<td align="center">N/A</td>
+				</tr>
+				<tr ng-repeat="nomination in nominations | filter:resourceFilter | orderBy:['resource', '-amount'] track by nomination.id">
+					<td align="center">{{nomination.id}}</td>
+					<td align="center">{{nomination.resource}}</td>
+					<td align="center">{{nomination.amount}} {{nomination.unit}}</td>
+					<td align="center">{{nomination.direction}}</td>
+					<td align="center">N/A</td>
+				</tr>
+			</tbody>
+		</table>
+	</md-content>
+</div>

@@ -1,31 +1,38 @@
 <!DOCTYPE html>
-<html ng-app="myApp">
+<html lang="en" ng-app="rep-frontend">
 	<head>
 		<meta charset="utf8"/>
 		<base href="/"/>
 		<title>Resource Exchange Platform</title>
-		<link rel="stylesheet" href="/css/app.css">
-		<script src="js/lib/angular/angular.js"></script>
+		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.7/angular-material.min.css">
+		<link rel="stylesheet" href="css/app.css">
+		<!--<link rel="stylesheet" href="/css/app.css">-->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.7/angular-material.min.js"></script>
+		<!--<script src="js/lib/angular/angular.js"></script>-->
 		<script src="js/app.js"></script>
 		<script src="js/services.js"></script>
 		<script src="js/controllers.js"></script>
 		<script src="js/filters.js"></script>
 		<script src="js/directives.js"></script>
 	</head>
-	<body>
-		<div ng-controller="AppCtrl">
-			<h2>Hello {{name}}</h2>
-			<ul class="menu">
-				<li>
-					<a href="view1">view1</a>
-				</li>
-				<li>
-					<a href="view2">view2</a>
-				</li>
-			</ul>
-			<div ng-view/>
-				<div>Angular seed app: v<span app-version/>
+	<body ng-controller="MainController">
+		<md-toolbar class="md-primary">
+			<div class="md-toolbar-tools">
+				<span>
+					<md-button ng-click="changeView('nominations')">Nominations</md-button>
+				</span>
+				<span>
+					<md-button ng-click="changeView('input')">Input</md-button>
+				</span>
 			</div>
+		</md-toolbar>
+		<div id="main">
+			<div ng-view></div>
 		</div>
 	</body>
 </html>
