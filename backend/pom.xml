@@ -17,6 +17,7 @@
 		<com.spotify.version>0.2.3</com.spotify.version>
 		<org.apache.jena.version>3.1.0</org.apache.jena.version>
 		<tec.units.version>0.8</tec.units.version>
+		<org.postgresql.version>9.4-1206-jdbc42</org.postgresql.version>
 	</properties>
 
 	<repositories>
@@ -48,6 +49,11 @@
 				<artifactId>unit-ri</artifactId>
 				<version>${tec.units.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.postgresql</groupId>
+				<artifactId>postgresql</artifactId>
+				<version>${org.postgresql.version}</version>
+			</dependency>
 			<!-- <dependency> -->
 			<!-- <groupId>org.apache.jena</groupId> -->
 			<!-- <artifactId>jena-core</artifactId> -->
@@ -63,9 +69,13 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-mongodb</artifactId>
-		</dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework.boot</groupId> -->
+<!-- 			<artifactId>spring-boot-starter-data-mongodb</artifactId> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>apache-jena-libs</artifactId>
@@ -75,6 +85,10 @@
 		<dependency>
 			<groupId>tec.units</groupId>
 			<artifactId>unit-ri</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -1,10 +1,82 @@
 <div layout="column" ng-cloak="">
 	<md-content layout-padding="">
-		<form>
+		<form name="nominationForm">
 			<md-input-container class="md-block">
-				<label>Filter:</label>
-				<input type="text" class="form-control" placeholder="Resource contains" ng-model="resourceFilter.resource">
+				<md-select name="region" ng-model="nomination.region" placeholder="Choose region">
+					<md-option ng-value="regionOption" ng-repeat="regionOption in regions">{{regionOption}}</md-option>
+				</md-select>
+				<div ng-messages="nominationForm.region.$error">
+					<div ng-message="required">Region is required.</div>
+				</div>
+			</md-input-container>
+			<md-input-container class="md-block">
+				<label for="resource">Resource:</label>
+				<input type="text" name="resource" class="form-control" placeholder="Type of resource(e.g. oil)" ng-model="nomination.resource" required>
+				<div ng-messages="nominationForm.resource.$error">
+					<div ng-message="required">Resource is required.</div>
+				</div>
+			</md-input-container class="md-block">
+			<md-input-container>
+				<label for="quantity">Quantity:</label>
+				<input type="text" name="quantity" class="form-control" placeholder="Quantity of resource(e.g. 300)" ng-model="nomination.quantity" required>
+				<div ng-messages="nominationForm.quantity.$error">
+					<div ng-message="required">Quantity is required.</div>
+				</div>
+			</md-input-container>
+			<md-input-container class="md-block">
+				<label for="unit">Unit:</label>
+				<input type="text" name="unit" class="form-control" placeholder="Unit of quantity(e.g. bl)" ng-model="nomination.unit" required>
+				<div ng-messages="nominationForm.unit.$error">
+					<div ng-message="required">Unit is required.</div>
+				</div>
+			</md-input-container
+			<md-input-container class="md-block">
+				<md-select name="direction" ng-model="nomination.direction" placeholder="Choose direction">
+					<md-option value="OFFER">Offer</md-option>
+					<md-option value="DEMAND">Demand</md-option>
+				</md-select>
+				<div ng-messages="nominationForm.direction.$error">
+					<div ng-message="required">Direction is required.</div>
+				</div>
+			</md-input-container>
+			<md-input-container class="md-block">
+				<md-button ng-disabled="nominationForm.$invalid" ng-click="submitNomination()">Submit nomination</md-button>
+			</md-input-container>
+			
+			<md-input-container class="md-block">
+				<md-button ng-disabled="nominationForm.$invalid"
+				ng-click="nominations.push({resource: angular.copy($scope.nomination.resource), quantity: angular.copy($scope.nomination.quantity), unit: angular.copy($scope.nomination.unit), direction: angular.copy($scope.nomination.direction)})">
+				Add nomination
+				</md-button>
+			</md-input-container>
+			<md-input-container class="md-block">
+				<!-- TODO disable if no nominations are available -->
+				<md-button ng-disabled="nominationForm.$invalid" ng-click="submitNominations(nominations)">Submit nominations</md-button>
 			</md-input-container>
 		</form>
+		<div ng-show="submittedNominationIds.length > 0">Submitted nominationids:
+			<div ng-repeat="nominationId in submittedNominationIds track by $index">
+				{{nominationId}}
+			</div>
+		</div>
+		<div id="nominationPreview" ng-show="nominations.length > 0">
+			<table id="NominationsTable" class="md-hue-1">
+			<thead>
+				<tr>
+					<th>Resource</th>
+					<th>Quantity</th>
+					<th>Unit</th>
+					<th>Demand/Offer</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="nomination in nominations track by $index">
+					<td align="center">{{nomination.resource}}</td>
+					<td align="center">{{nomination.quantity}}</td>
+					<td align="center">{{nomination.unit}}</td>
+					<td align="center">{{nomination.direction}}</td>
+				</tr>
+			</tbody>
+		</div>
 	</md-content>
 </div>

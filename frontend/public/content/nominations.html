@@ -2,7 +2,11 @@
 	<md-content layout-padding="">
 		<form>
 			<md-input-container class="md-block">
-				<label>Filter:</label>
+				<label>Filter Region:</label>
+				<input type="text" class="form-control" placeholder="Region contains" ng-model="resourceFilter.region">
+			</md-input-container>
+			<md-input-container class="md-block">
+				<label>Filter Resource:</label>
 				<input type="text" class="form-control" placeholder="Resource contains" ng-model="resourceFilter.resource">
 			</md-input-container>
 		</form>
@@ -12,6 +16,7 @@
 			<thead>
 				<tr>
 					<th>Id</th>
+					<th>Region</th>
 					<th>Resource</th>
 					<th>Quantity</th>
 					<th>Demand/Offer</th>
@@ -19,18 +24,22 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="allocation in allocations | filter:resourceFilter | orderBy:['nomination.resource', 'nomination.amount'] track by allocation.id">
+				<tr ng-repeat="allocation in allocations | filter:resourceFilter | orderBy:['nomination.resource', '-nomination.quantity'] track by allocation.id">
 					<td align="center">{{allocation.nomination.id}}</td>
+					<td align="center">{{allocation.nomination.region}}</td>
 					<td align="center">{{allocation.nomination.resource}}</td>
-					<td align="center">{{allocation.nomination.amount}} {{allocation.nomination.unit}}</td>
+					<td align="center">{{allocation.nomination.quantity}} {{allocation.nomination.unit}}</td>
 					<td align="center">{{allocation.nomination.direction}}</td>
 					<!-- TODO rangeFilter:this | ng-controller="NominationController" -->
-					<td align="center">N/A</td>
+					<td align="center">
+						<div ng-repeat="matchedNomination in allocation.matchedNominations">{{matchedNomination.id}}</div>
+					</td>
 				</tr>
-				<tr ng-repeat="nomination in nominations | filter:resourceFilter | orderBy:['resource', '-amount'] track by nomination.id">
+				<tr ng-repeat="nomination in nominations | filter:resourceFilter | orderBy:['resource', '-quantity'] track by nomination.id">
 					<td align="center">{{nomination.id}}</td>
+					<td align="denter">{{nomination.region}}</td>
 					<td align="center">{{nomination.resource}}</td>
-					<td align="center">{{nomination.amount}} {{nomination.unit}}</td>
+					<td align="center">{{nomination.quantity}} {{nomination.unit}}</td>
 					<td align="center">{{nomination.direction}}</td>
 					<td align="center">N/A</td>
 				</tr>

@@ -9,35 +9,35 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="resource_nomination_association")
-public class ResourceNominationAssociation {
+@Table(name="resource_region")
+public class ResourceRegion {
 	@Id
 	@GeneratedValue
 	private Long id;
-	private String participant;
-	@OneToMany(mappedBy="association")
+	private String name;
+	@OneToMany(mappedBy="region")
 	private List<ResourceNomination> nominations;
 	
 	public Long getId() {
 		return id;
 	}
-
+	
 	public void setId(Long id) {
 		this.id = id;
 	}
 	
-	public String getParticipant() {
-		return participant;
-	}
-
-	public void setParticipant(String participant) {
-		this.participant = participant;
+	public String getName() {
+		return name;
 	}
 	
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public List<ResourceNomination> getNominations() {
 		return nominations;
 	}
-	
+
 	public void setNominations(List<ResourceNomination> nominations) {
 		this.nominations = nominations;
 	}

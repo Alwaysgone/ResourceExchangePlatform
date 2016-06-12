@@ -1,9 +1,9 @@
 package at.ac.tuwien.rep.dao;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import at.ac.tuwien.rep.model.ResourceNominationAssociation;
 
-public interface ResourceNominationAssociationRepository extends MongoRepository<ResourceNominationAssociation, String> {
+public interface ResourceNominationAssociationRepository extends JpaRepository<ResourceNominationAssociation, Long> {
 
 }

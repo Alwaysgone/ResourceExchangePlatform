@@ -1,19 +1,21 @@
 package at.ac.tuwien.rep.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class ResourceNominationDTO {
-	private String id;
+	private Long id;
 	private String resource;
-	private BigDecimal amount;
+	private BigDecimal quantity;
 	private String unit;
 	private String direction;
+	private String region;
 	
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 	
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
@@ -25,12 +27,12 @@ public class ResourceNominationDTO {
 		this.resource = resource;
 	}
 
-	public BigDecimal getAmount() {
-		return amount;
+	public BigDecimal getQuantity() {
+		return quantity;
 	}
 
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
+	public void setQuantity(BigDecimal quantity) {
+		this.quantity = quantity;
 	}
 	
 	public String getUnit() {
@@ -47,5 +49,13 @@ public class ResourceNominationDTO {
 
 	public void setDirection(String direction) {
 		this.direction = direction;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
 	}
 }

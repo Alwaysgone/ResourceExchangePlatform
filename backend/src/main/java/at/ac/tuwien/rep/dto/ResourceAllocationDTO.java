@@ -3,15 +3,15 @@ package at.ac.tuwien.rep.dto;
 import java.util.List;
 
 public class ResourceAllocationDTO {
-	private String id;
+	private Long id;
 	private ResourceNominationDTO nomination;
 	private List<ResourceNominationDTO> matchedNominations;
 	
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

@@ -24,14 +24,16 @@ public class DTOTest {
 		dto.setParticipant("participant1");
 		List<ResourceNominationDTO> nominations = new LinkedList<>();
 		ResourceNominationDTO nomination1 = new ResourceNominationDTO();
-		nomination1.setAmount(BigDecimal.TEN);
+		nomination1.setQuantity(BigDecimal.TEN);
 		nomination1.setDirection("OFFER");
 		nomination1.setResource("oil");
+		nomination1.setRegion("BVG");
 		nominations.add(nomination1);
 		ResourceNominationDTO nomination2 = new ResourceNominationDTO();
-		nomination2.setAmount(new BigDecimal("5"));
+		nomination2.setQuantity(new BigDecimal("5"));
 		nomination2.setDirection("DEMAND");
 		nomination2.setResource("oil");
+		nomination2.setRegion("BVG");
 		nominations.add(nomination2);
 		dto.setNominations(nominations);
 		ObjectMapper mapper = new ObjectMapper();
