@@ -1,5 +1,6 @@
 package at.ac.tuwien.rep;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,16 +17,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import at.ac.tuwien.rep.dao.ResourceAllocationRepository;
 import at.ac.tuwien.rep.dao.ResourceNominationAssociationRepository;
 import at.ac.tuwien.rep.dao.ResourceNominationRepository;
 import at.ac.tuwien.rep.dao.ResourceRegionRepository;
 import at.ac.tuwien.rep.dto.DTOTransformer;
-import at.ac.tuwien.rep.dto.ResourceAllocationDTO;
 import at.ac.tuwien.rep.dto.ResourceNominationDTO;
 import at.ac.tuwien.rep.dto.ResourceRequestDTO;
 import at.ac.tuwien.rep.dto.ResourcesDTO;
-import at.ac.tuwien.rep.model.ResourceAllocation;
 import at.ac.tuwien.rep.model.ResourceNomination;
 import at.ac.tuwien.rep.model.ResourceNominationAssociation;
 import at.ac.tuwien.rep.model.ResourceRegion;
@@ -34,7 +32,6 @@ import at.ac.tuwien.rep.model.ResourceRegion;
 @RequestMapping(path="/api/")
 public class MainController {
 	private ResourceNominationRepository nominationRepository;
-	private ResourceAllocationRepository allocationRepository;
 	private ResourceNominationAssociationRepository nominationAssociationRepository;
 	private ResourceRegionRepository regionRepository;
 	private DTOTransformer transformer;
@@ -42,13 +39,11 @@ public class MainController {
 	
 	@Autowired
 	public MainController(ResourceNominationRepository nominationRepository
-			, ResourceAllocationRepository allocationRepository
 			, ResourceNominationAssociationRepository nominationAssociationRepository
 			, ResourceRegionRepository regionRepository
 			, DTOTransformer transformer
 			, NominationMatcher nominationMatcher) {
 		this.nominationRepository = nominationRepository;
-		this.allocationRepository = allocationRepository;
 		this.nominationAssociationRepository = nominationAssociationRepository;
 		this.regionRepository = regionRepository;
 		this.transformer = transformer;
@@ -70,20 +65,19 @@ public class MainController {
 	@CrossOrigin
 	@RequestMapping(path="/nominations", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResourcesDTO getNominations() {
-		List<ResourceAllocation> allocations = allocationRepository.findAll();
 		List<ResourceNomination> nominations = nominationRepository.findAll();
-		return transformer.transform(allocations, nominations);
+		return transformer.transform(nominations);
 	}
 	
 	@CrossOrigin
 	@RequestMapping(path="/nominations/{nominationId}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResourceAllocationDTO getAllocation(@PathVariable("nominationId") Long nominationId) {
-		ResourceAllocation allocation = allocationRepository.findByNominationId(nominationId);
-		if(allocation == null) {
-			//TODO throw EntityNotFoundException
-			return null;
+	public ResourceNominationDTO getNomination(@PathVariable("nominationId") Long nominationId) {
+		ResourceNomination nomination = nominationRepository.getOne(nominationId);
+		if(nomination == null) {
+			//TODO throw exception for 404
 		}
-		return transformer.transform(allocation);
+		//TODO fix missing matchedNominations list
+		return transformer.transform(nomination);
 	}
 	
 	@CrossOrigin
@@ -107,9 +101,10 @@ public class MainController {
 		association.setParticipant(request.getParticipant());
 		association.setNominations(request.getNominations().stream().map(n -> transformer.transform(n)).collect(Collectors.toList()));
 		final ResourceNominationAssociation managedAssociation = nominationAssociationRepository.save(association);
-		List<Long> ids = association.getNominations().stream().map(n -> {n.setAssociation(managedAssociation); return n;}).map(n -> nominationRepository.save(n).getId()).collect(Collectors.toList());
-		Thread matchingThread = new Thread(new NominationMatcher.NominationMatcherThread(nominationMatcher));
-		matchingThread.start();
+		List<Long> ids = association.getNominations().stream().map(n -> {n.setAssociation(managedAssociation); n.setMatchedNominations(new ArrayList<>()); return n;}).map(n -> nominationRepository.save(n).getId()).collect(Collectors.toList());
+//		Thread matchingThread = new Thread(new NominationMatcher.NominationMatcherThread(nominationMatcher));
+//		matchingThread.start();
+		new NominationMatcher.NominationMatcherThread(nominationMatcher).run();
 		return ids;
 	}
 	

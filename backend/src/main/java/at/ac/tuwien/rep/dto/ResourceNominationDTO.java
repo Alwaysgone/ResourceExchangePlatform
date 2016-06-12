@@ -10,6 +10,7 @@ public class ResourceNominationDTO {
 	private String unit;
 	private String direction;
 	private String region;
+	private List<Long> matchedNominations;
 	
 	public Long getId() {
 		return id;
@@ -57,5 +58,13 @@ public class ResourceNominationDTO {
 
 	public void setRegion(String region) {
 		this.region = region;
+	}
+
+	public List<Long> getMatchedNominations() {
+		return matchedNominations;
+	}
+
+	public void setMatchedNominations(List<Long> matchedNominations) {
+		this.matchedNominations = matchedNominations;
 	}
 }

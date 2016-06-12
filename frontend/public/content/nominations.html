@@ -24,24 +24,13 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="allocation in allocations | filter:resourceFilter | orderBy:['nomination.resource', '-nomination.quantity'] track by allocation.id">
-					<td align="center">{{allocation.nomination.id}}</td>
-					<td align="center">{{allocation.nomination.region}}</td>
-					<td align="center">{{allocation.nomination.resource}}</td>
-					<td align="center">{{allocation.nomination.quantity}} {{allocation.nomination.unit}}</td>
-					<td align="center">{{allocation.nomination.direction}}</td>
-					<!-- TODO rangeFilter:this | ng-controller="NominationController" -->
-					<td align="center">
-						<div ng-repeat="matchedNomination in allocation.matchedNominations">{{matchedNomination.id}}</div>
-					</td>
-				</tr>
 				<tr ng-repeat="nomination in nominations | filter:resourceFilter | orderBy:['resource', '-quantity'] track by nomination.id">
 					<td align="center">{{nomination.id}}</td>
 					<td align="denter">{{nomination.region}}</td>
 					<td align="center">{{nomination.resource}}</td>
 					<td align="center">{{nomination.quantity}} {{nomination.unit}}</td>
 					<td align="center">{{nomination.direction}}</td>
-					<td align="center">N/A</td>
+					<td align="center">{{nomination.matchedNominations.join(', ')}}</td>
 				</tr>
 			</tbody>
 		</table>

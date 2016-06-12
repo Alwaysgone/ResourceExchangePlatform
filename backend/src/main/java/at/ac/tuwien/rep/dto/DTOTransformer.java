@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import at.ac.tuwien.rep.dao.ResourceRegionRepository;
-import at.ac.tuwien.rep.model.ResourceAllocation;
 import at.ac.tuwien.rep.model.ResourceDirection;
 import at.ac.tuwien.rep.model.ResourceNomination;
 import at.ac.tuwien.rep.model.ResourceRegion;
@@ -22,9 +21,8 @@ public class DTOTransformer {
 		this.regionRepository = regionRepository;
 	}
 	
-	public ResourcesDTO transform(List<ResourceAllocation> allocations, List<ResourceNomination> nominations) {
+	public ResourcesDTO transform(List<ResourceNomination> nominations) {
 		ResourcesDTO dto = new ResourcesDTO();
-		dto.setAllocations(allocations.stream().map(a -> transform(a)).collect(Collectors.toList()));
 		dto.setNominations(nominations.stream().map(n -> transform(n)).collect(Collectors.toList()));
 		return dto;
 	}
@@ -37,15 +35,7 @@ public class DTOTransformer {
 		dto.setResource(nomination.getResource());
 		dto.setUnit(nomination.getUnit());
 		dto.setRegion(nomination.getRegion().getName());
-//		dto.setMatchedNominations(nomination.getMatchedNominations().stream().map(n -> transform(n)).collect(Collectors.toList()));
-		return dto;
-	}
-
-	public ResourceAllocationDTO transform(ResourceAllocation allocation) {
-		ResourceAllocationDTO dto = new ResourceAllocationDTO();
-		dto.setId(allocation.getId());
-		dto.setNomination(transform(allocation.getNomination()));
-		dto.setMatchedNominations(allocation.getMatchedNominations().stream().map(n -> transform(n)).collect(Collectors.toList()));
+		dto.setMatchedNominations(nomination.getMatchedNominations().stream().map(n -> n.getId()).collect(Collectors.toList()));
 		return dto;
 	}
 
