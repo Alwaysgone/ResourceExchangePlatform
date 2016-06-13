@@ -1,9 +1,11 @@
 package at.ac.tuwien.rep.dto;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import at.ac.tuwien.rep.dao.ResourceRegionRepository;
@@ -21,11 +23,22 @@ public class DTOTransformer {
 		this.regionRepository = regionRepository;
 	}
 	
-	public ResourcesDTO transform(List<ResourceNomination> nominations) {
+	public ResourcesDTO transform(Page<ResourceNomination> nominations, Pageable pageable) {
 		ResourcesDTO dto = new ResourcesDTO();
-		dto.setNominations(nominations.stream().map(n -> transform(n)).collect(Collectors.toList()));
+		System.out.println("Transforming " + nominations.getContent().size() + " elements");
+		Page<ResourceNominationDTO> nominationsPage = new PageImpl<>(nominations.getContent().stream().map(n -> transform(n)).collect(Collectors.toList()), pageable, nominations.getTotalElements());
+		System.out.println("Page size is " + pageable.getPageSize() + " number of total elements is " + nominations.getTotalElements());
+		dto.setNominations(nominationsPage);
+		//		dto.setNominations(nominations.getContent().stream().map(n -> transform(n)).collect(Collectors.toList()));
+		System.out.println("Transformed " + dto.getNominations().getContent().size() + " elements");
 		return dto;
 	}
+	
+//	public ResourcesDTO transform(List<ResourceNomination> nominations) {
+//		ResourcesDTO dto = new ResourcesDTO();
+//		dto.setNominations(nominations.stream().map(n -> transform(n)).collect(Collectors.toList()));
+//		return dto;
+//	}
 
 	public ResourceNominationDTO transform(ResourceNomination nomination) {
 		ResourceNominationDTO dto = new ResourceNominationDTO();

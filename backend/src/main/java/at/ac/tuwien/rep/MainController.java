@@ -7,7 +7,11 @@ import java.util.stream.Collectors;
 
 import javax.websocket.server.PathParam;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +40,7 @@ public class MainController {
 	private ResourceRegionRepository regionRepository;
 	private DTOTransformer transformer;
 	private NominationMatcher nominationMatcher;
-	
+
 	@Autowired
 	public MainController(ResourceNominationRepository nominationRepository
 			, ResourceNominationAssociationRepository nominationAssociationRepository
@@ -49,26 +53,45 @@ public class MainController {
 		this.transformer = transformer;
 		this.nominationMatcher = nominationMatcher;
 	}
-	
+
 	@RequestMapping(method=RequestMethod.GET)
 	public String getHelloWorld() {
 		return "Hello World!";
 	}
-	
+
 	@RequestMapping(path="/resources", method=RequestMethod.GET, produces=MediaType.TEXT_PLAIN_VALUE)
 	public String getNumberOfResources(@RequestParam(name="Name", required=false) List<String> resourceNames, @RequestParam(name="Direction", required=false) String direction) {
 		Set<String> resources = nominationRepository.findAll().stream().map(n -> n.getResource())
-		.filter(r -> resourceNames == null || resourceNames.contains(r)).collect(Collectors.toSet());
+				.filter(r -> resourceNames == null || resourceNames.contains(r)).collect(Collectors.toSet());
 		return "Found the following resources: " + (resources != null ? String.join(", ", resources) : "N/A");
 	}
-	
+
 	@CrossOrigin
 	@RequestMapping(path="/nominations", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResourcesDTO getNominations() {
-		List<ResourceNomination> nominations = nominationRepository.findAll();
-		return transformer.transform(nominations);
+	public ResourcesDTO getNominations(@RequestParam(name="page") Long page, @RequestParam("limit") Long limit
+			,@RequestParam(name="region", required=false) String region, @RequestParam(name="resource", required=false) String resource) {
+		/*
+		 * | filter:resourceFilter | orderBy:['resource', '-quantity']
+		 */
+		Pageable pageable = new PageRequest(page.intValue() - 1, limit.intValue());
+		Page<ResourceNomination> nominations;
+		if(!StringUtils.isEmpty(region) && !StringUtils.isEmpty(resource)) {
+			System.out.println("Returning nominations filtered by region and resource");
+			nominations = nominationRepository.findByRegionContainingIgnoreCaseAndResourceContainingIgnoreCaseOrderByResource(region, resource, pageable);
+
+		} else if(!StringUtils.isEmpty(region)) {
+			System.out.println("Returning nominations filtered by region");
+			nominations = nominationRepository.findByRegionContainingIgnoreCaseOrderByResource(region, pageable);
+		} else if(!StringUtils.isEmpty(resource)) {
+			System.out.println("Returning nominations filtered by resource");
+			nominations = nominationRepository.findByResourceContainingIgnoreCaseOrderByResource(resource, pageable);
+		} else {
+			System.out.println("Returning all nominations");
+			nominations = nominationRepository.findAll(pageable);
+		}
+		return transformer.transform(nominations, pageable);
 	}
-	
+
 	@CrossOrigin
 	@RequestMapping(path="/nominations/{nominationId}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResourceNominationDTO getNomination(@PathVariable("nominationId") Long nominationId) {
@@ -79,7 +102,7 @@ public class MainController {
 		//TODO fix missing matchedNominations list
 		return transformer.transform(nomination);
 	}
-	
+
 	@CrossOrigin
 	@RequestMapping(path="/nominations", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE)
 	public List<Long> addNominations(@RequestBody ResourceRequestDTO request) {
@@ -91,10 +114,11 @@ public class MainController {
 		}
 		for (ResourceNominationDTO nominationDto : request.getNominations()) {
 			if(nominationDto.getResource() == null
+					|| nominationDto.getRegion() == null
 					|| nominationDto.getQuantity() == null
 					|| nominationDto.getUnit() == null
 					|| nominationDto.getDirection() == null) {
-				throw new IllegalArgumentException("Either resource, quantity, unit or direction was null in nomination!");
+				throw new IllegalArgumentException("Either resource, region, quantity, unit or direction was null in nomination!");
 			}
 		}
 		ResourceNominationAssociation association = new ResourceNominationAssociation();
@@ -102,18 +126,18 @@ public class MainController {
 		association.setNominations(request.getNominations().stream().map(n -> transformer.transform(n)).collect(Collectors.toList()));
 		final ResourceNominationAssociation managedAssociation = nominationAssociationRepository.save(association);
 		List<Long> ids = association.getNominations().stream().map(n -> {n.setAssociation(managedAssociation); n.setMatchedNominations(new ArrayList<>()); return n;}).map(n -> nominationRepository.save(n).getId()).collect(Collectors.toList());
-//		Thread matchingThread = new Thread(new NominationMatcher.NominationMatcherThread(nominationMatcher));
-//		matchingThread.start();
+		//		Thread matchingThread = new Thread(new NominationMatcher.NominationMatcherThread(nominationMatcher));
+		//		matchingThread.start();
 		new NominationMatcher.NominationMatcherThread(nominationMatcher).run();
 		return ids;
 	}
-	
+
 	@CrossOrigin
 	@RequestMapping(path="/regions", method=RequestMethod.GET)
 	public List<String> getResourceRegions() {
 		return regionRepository.findAll().stream().map(r -> r.getName()).collect(Collectors.toList());
 	}
-	
+
 	@RequestMapping(path="/regions", method=RequestMethod.POST)
 	public Long createRegion(@RequestParam("name") String regionName) {
 		if(regionName == null) {
@@ -123,19 +147,19 @@ public class MainController {
 		region.setName(regionName);
 		return regionRepository.save(region).getId();
 	}
-	
+
 	@RequestMapping(path="/resources/{resourceId}", method= RequestMethod.POST, consumes={"application/xml", "application/rdf+xml"})
 	public String addResourceAllocations(@PathParam("resourceId") String resourceId) {
 		return "";
 	}
-	
+
 	@RequestMapping(value="/rdf", method=RequestMethod.GET, produces={"application/xml", "application/rdf+xml"})
-    public String getModelAsXml() {
-       // Note that we added "application/rdf+xml" as one of the supported types
-       // for this method. Otherwise, we utilize your existing xml serialization
+	public String getModelAsXml() {
+		// Note that we added "application/rdf+xml" as one of the supported types
+		// for this method. Otherwise, we utilize your existing xml serialization
 		return "";
-    }
-	
+	}
+
 	/*
 	 * <?xml version="1.0"?>
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -144,6 +168,6 @@ public class MainController {
     <dc:title>World Wide Web Consortium</dc:title> 
   </rdf:Description>
 </rdf:RDF>
-  
+
 	 */
 }
