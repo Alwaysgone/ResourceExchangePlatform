@@ -40,9 +40,6 @@
 					<div ng-message="required">Direction is required.</div>
 				</div>
 			</md-input-container>
-			<!--<md-input-container class="md-block">
-				<md-button ng-disabled="nominationForm.$invalid" ng-click="submitNomination()">Submit nomination</md-button>
-			</md-input-container>-->
 			<md-input-container flex>
 				<md-button class="md-secondary" ng-disabled="nominationForm.$invalid" ng-click="addNomination()">Add nomination</md-button>
 			</md-input-container>
@@ -76,26 +73,5 @@
 				</tbody>
 			</table>
 		</md-table-container>
-		
-		<!--<div id="nominationPreview" ng-show="nominations.length > 0">
-			<table id="NominationsTable" class="md-hue-1">
-				<thead>
-					<tr>
-						<th>Resource</th>
-						<th>Quantity</th>
-						<th>Unit</th>
-						<th>Demand/Offer</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="nomination in nominations track by $index">
-						<td align="center">{{nomination.resource}}</td>
-						<td align="center">{{nomination.quantity}}</td>
-						<td align="center">{{nomination.unit}}</td>
-						<td align="center">{{nomination.direction}}</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>-->
 	</md-content>
 </div>

@@ -18,6 +18,7 @@
 		<org.apache.jena.version>3.1.0</org.apache.jena.version>
 		<tec.units.version>0.8</tec.units.version>
 		<org.postgresql.version>9.4-1206-jdbc42</org.postgresql.version>
+		<net.sourceforge.dynamicreports.version>4.1.0</net.sourceforge.dynamicreports.version>
 	</properties>
 
 	<repositories>
@@ -25,6 +26,11 @@
 			<id>spring-releases</id>
 			<name>Spring Releases</name>
 			<url>https://repo.spring.io/libs-release</url>
+		</repository>
+		<repository>
+			<id>jasperreports</id>
+			<name>jasperreports</name>
+			<url>http://jasperreports.sourceforge.net/maven2</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
@@ -54,6 +60,23 @@
 				<artifactId>postgresql</artifactId>
 				<version>${org.postgresql.version}</version>
 			</dependency>
+<!-- 			http://www.dynamicreports.org/ -->
+			<dependency>
+				<groupId>net.sourceforge.dynamicreports</groupId>
+				<artifactId>dynamicreports-core</artifactId>
+				<version>${net.sourceforge.dynamicreports.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sourceforge.dynamicreports</groupId>
+				<artifactId>dynamicreports-adhoc</artifactId>
+				<version>${net.sourceforge.dynamicreports.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sourceforge.dynamicreports</groupId>
+				<artifactId>dynamicreports-googlecharts</artifactId>
+				<version>${net.sourceforge.dynamicreports.version}</version>
+			</dependency>
+
 			<!-- <dependency> -->
 			<!-- <groupId>org.apache.jena</groupId> -->
 			<!-- <artifactId>jena-core</artifactId> -->
@@ -69,13 +92,25 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.springframework.boot</groupId> -->
-<!-- 			<artifactId>spring-boot-starter-data-mongodb</artifactId> -->
-<!-- 		</dependency> -->
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.springframework.boot</groupId> -->
+		<!-- <artifactId>spring-boot-starter-data-mongodb</artifactId> -->
+		<!-- </dependency> -->
+		<dependency>
+			<groupId>net.sourceforge.dynamicreports</groupId>
+			<artifactId>dynamicreports-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.dynamicreports</groupId>
+			<artifactId>dynamicreports-adhoc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.dynamicreports</groupId>
+			<artifactId>dynamicreports-googlecharts</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>apache-jena-libs</artifactId>
