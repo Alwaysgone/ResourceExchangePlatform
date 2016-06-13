@@ -56,7 +56,28 @@
 				{{nominationId}}
 			</div>
 		</div>
-		<div id="nominationPreview" ng-show="nominations.length > 0">
+		<md-table-container ng-show="nominations.length > 0">
+			<table md-table>
+				<thead md-head>
+					<tr md-row>
+						<th md-column>Region</th>
+						<th md-column>Resource</th>
+						<th md-column>Quantity</th>
+						<th md-column>Demand/Offer</th>
+					</tr>
+				</thead>
+				<tbody md-body>
+					<tr md-row ng-repeat="nomination in nominations track by $index">
+						<td md-cell>{{nomination.region}}</td>
+						<td md-cell>{{nomination.resource}}</td>
+						<td md-cell>{{nomination.quantity}} {{nomination.unit}}</td>
+						<td md-cell>{{nomination.direction}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</md-table-container>
+		
+		<!--<div id="nominationPreview" ng-show="nominations.length > 0">
 			<table id="NominationsTable" class="md-hue-1">
 				<thead>
 					<tr>
@@ -75,6 +96,6 @@
 					</tr>
 				</tbody>
 			</table>
-		</div>
+		</div>-->
 	</md-content>
 </div>
