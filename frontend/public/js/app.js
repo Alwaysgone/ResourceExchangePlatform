@@ -2,12 +2,8 @@
 
 // Declare app level module which depends on filters, and services
 
-/*angular.module('app.config')
-  .value('app.config', {
-    basePath: 'http://127.0.0.1:8080/api' // Set your base path here
-  });*/
+
 angular.module('rep-frontend', [
-  //'app.config',
   'ngRoute',
   'ngAria',
   'ngMaterial',

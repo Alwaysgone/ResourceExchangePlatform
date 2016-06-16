@@ -1,7 +1,6 @@
 <div layout="column" ng-cloak="">
 	<md-content layout-padding="">
 		<form name="nominationForm">
-			<!--<div layout="row" layout-align="space-between center">-->
 			<md-input-container class="md-block">
 				<md-select name="region" ng-model="nomination.region" placeholder="Choose region">
 					<md-option ng-value="regionOption" ng-repeat="regionOption in regions">{{regionOption}}</md-option>
@@ -44,7 +43,6 @@
 				<md-button class="md-secondary" ng-disabled="nominationForm.$invalid" ng-click="addNomination()">Add nomination</md-button>
 			</md-input-container>
 			<md-input-container flex>
-				<!-- TODO disable if no nominations are available -->
 				<md-button class="md-secondary" ng-disabled="nominationForm.$invalid || nominations === []" ng-click="submitNominations(nominations)">Submit nominations</md-button>
 			</md-input-container>
 		</form>

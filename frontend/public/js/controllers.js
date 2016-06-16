@@ -3,7 +3,6 @@
 /* Controllers */
 
 angular.module('rep-frontend.controllers', [
-	//'app.config'
 ])
 .controller('AppCtrl', function ($scope, $http) {
 	$scope.name = 'Mike';
@@ -14,14 +13,6 @@ angular.module('rep-frontend.controllers', [
 	};
 })
 .controller('NominationController', ['$scope', '$http', '$interval', 'endpoint', function ($scope, $http, $interval, endpoint) {
-    /*$http.get('http://192.168.99.100:8080/api' + '/nominations')
-    .then(function(response) {
-        console.log('Successfully retrieved nominations');
-		$scope.nominations = response.data.nominations;
-    }, function(response) {
-		console.log('An error occurred while fetching nominations status:' + response.status + ', data: ' + response.data + ', statusText : ' + response.statusText);
-		$scope.nominations = [];
-	});*/
 	function success(response) {
 		console.log('Successfully retrieved nominations');
 		$scope.nominations = response.data.nominations;
@@ -37,7 +28,7 @@ angular.module('rep-frontend.controllers', [
 	$scope.startTableRefresh = function() {
         if ( angular.isDefined(refreshTable) ) return;
 			console.log('starting refresh timer');
-			refreshTable = $interval($scope.getNominations, 10000);
+			refreshTable = $interval($scope.getNominations, 5000);
     };
 	$scope.stopTableRefresh = function() {
         if (angular.isDefined(refreshTable)) {
@@ -65,7 +56,6 @@ angular.module('rep-frontend.controllers', [
 		var resourceDTO = {participant: 'participant1', nominations: nominations};
 		$http.post(endpoint + '/nominations', resourceDTO)
 		.then(function(response) {
-			// TODO
 			console.log('Successfully submitted nominations');
 			$scope.allocations = response.data.allocations;
 			$scope.nominations = response.data.nominations;
@@ -78,7 +68,6 @@ angular.module('rep-frontend.controllers', [
 	$scope.submitNomination = function(){
 		var nominations = [];
 		nominations.push($scope.nomination);
-		//TODO use login name
 		var resourceDTO = {participant: 'participant1', nominations: nominations};
 		$http.post(endpoint + '/nominations', resourceDTO)
 		.then(function(response) {
