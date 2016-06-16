@@ -11,9 +11,9 @@ angular.module('rep-frontend.controllers', [
 .controller('MainController', function($scope, $location) {
 	$scope.changeView = function(view){
 		$location.path(view);
-	}
+	};
 })
-.controller('NominationController', ['$scope', '$http', 'endpoint', function ($scope, $http, endpoint) {
+.controller('NominationController', ['$scope', '$http', '$interval', 'endpoint', function ($scope, $http, $interval, endpoint) {
     /*$http.get('http://192.168.99.100:8080/api' + '/nominations')
     .then(function(response) {
         console.log('Successfully retrieved nominations');
@@ -23,6 +23,7 @@ angular.module('rep-frontend.controllers', [
 		$scope.nominations = [];
 	});*/
 	function success(response) {
+		console.log('Successfully retrieved nominations');
 		$scope.nominations = response.data.nominations;
 	}
 	$scope.query = {
@@ -32,8 +33,21 @@ angular.module('rep-frontend.controllers', [
 	$scope.getNominations = function () {
 		$scope.promise =  $http.get(endpoint + '/nominations',{params: $scope.query}).then(success);
 	};
-	
+	var refreshTable;
+	$scope.startTableRefresh = function() {
+        if ( angular.isDefined(refreshTable) ) return;
+			console.log('starting refresh timer');
+			refreshTable = $interval($scope.getNominations, 10000);
+    };
+	$scope.stopTableRefresh = function() {
+        if (angular.isDefined(refreshTable)) {
+			console.log('stopping refresh timer');
+            $interval.cancel(refreshTable);
+            refreshTable = undefined;
+        }
+    };
 	$scope.getNominations();
+	$scope.startTableRefresh();
 }])
 .controller('InputController', function($scope, $http, endpoint) {
 	$http.get(endpoint + '/regions')

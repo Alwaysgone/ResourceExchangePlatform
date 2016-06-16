@@ -9,11 +9,6 @@ import org.springframework.data.repository.query.Param;
 import at.ac.tuwien.rep.model.ResourceNomination;
 
 public interface ResourceNominationRepository extends JpaRepository<ResourceNomination, Long> {
-//	List<ResourceNomination> findByIdIn(List<String> ids);
-	
-//	@Query("select n from ResourceNomination n WHERE n.fulfilledNominations IS NOT EMPTY")
-//	List<ResourceNomination> findAllWithNoAllocation();
-	
 	@Query("SELECT n FROM ResourceNomination n ORDER BY n.resource ASC, n.quantity DESC")
 	Page<ResourceNomination> findAll(Pageable pageable);
 	

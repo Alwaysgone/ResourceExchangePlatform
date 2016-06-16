@@ -70,23 +70,16 @@ public class MainController {
 	@RequestMapping(path="/nominations", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResourcesDTO getNominations(@RequestParam(name="page") Long page, @RequestParam("limit") Long limit
 			,@RequestParam(name="region", required=false) String region, @RequestParam(name="resource", required=false) String resource) {
-		/*
-		 * | filter:resourceFilter | orderBy:['resource', '-quantity']
-		 */
 		Pageable pageable = new PageRequest(page.intValue() - 1, limit.intValue());
 		Page<ResourceNomination> nominations;
 		if(!StringUtils.isEmpty(region) && !StringUtils.isEmpty(resource)) {
-			System.out.println("Returning nominations filtered by region and resource");
 			nominations = nominationRepository.findByRegionContainingIgnoreCaseAndResourceContainingIgnoreCaseOrderByResource(region, resource, pageable);
 
 		} else if(!StringUtils.isEmpty(region)) {
-			System.out.println("Returning nominations filtered by region");
 			nominations = nominationRepository.findByRegionContainingIgnoreCaseOrderByResource(region, pageable);
 		} else if(!StringUtils.isEmpty(resource)) {
-			System.out.println("Returning nominations filtered by resource");
 			nominations = nominationRepository.findByResourceContainingIgnoreCaseOrderByResource(resource, pageable);
 		} else {
-			System.out.println("Returning all nominations");
 			nominations = nominationRepository.findAll(pageable);
 		}
 		return transformer.transform(nominations, pageable);
@@ -99,7 +92,6 @@ public class MainController {
 		if(nomination == null) {
 			//TODO throw exception for 404
 		}
-		//TODO fix missing matchedNominations list
 		return transformer.transform(nomination);
 	}
 

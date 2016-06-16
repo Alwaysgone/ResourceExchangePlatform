@@ -25,20 +25,10 @@ public class DTOTransformer {
 	
 	public ResourcesDTO transform(Page<ResourceNomination> nominations, Pageable pageable) {
 		ResourcesDTO dto = new ResourcesDTO();
-		System.out.println("Transforming " + nominations.getContent().size() + " elements");
 		Page<ResourceNominationDTO> nominationsPage = new PageImpl<>(nominations.getContent().stream().map(n -> transform(n)).collect(Collectors.toList()), pageable, nominations.getTotalElements());
-		System.out.println("Page size is " + pageable.getPageSize() + " number of total elements is " + nominations.getTotalElements());
 		dto.setNominations(nominationsPage);
-		//		dto.setNominations(nominations.getContent().stream().map(n -> transform(n)).collect(Collectors.toList()));
-		System.out.println("Transformed " + dto.getNominations().getContent().size() + " elements");
 		return dto;
 	}
-	
-//	public ResourcesDTO transform(List<ResourceNomination> nominations) {
-//		ResourcesDTO dto = new ResourcesDTO();
-//		dto.setNominations(nominations.stream().map(n -> transform(n)).collect(Collectors.toList()));
-//		return dto;
-//	}
 
 	public ResourceNominationDTO transform(ResourceNomination nomination) {
 		ResourceNominationDTO dto = new ResourceNominationDTO();
