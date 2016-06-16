@@ -75,11 +75,6 @@ public class NominationMatcher {
 		}
 	}
 
-	private String toString(ResourceNomination nomination) {
-		return "[resource=" + nomination.getResource() + ", quantity=" + nomination.getQuantity() 
-				+ ", unit=" + nomination.getUnit() + ", direction=" + nomination.getDirection() + "]";
-	}
-
 	public static class NominationMatcherThread implements Runnable {
 		private NominationMatcher matcher;
 

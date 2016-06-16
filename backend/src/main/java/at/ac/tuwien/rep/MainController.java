@@ -1,18 +1,25 @@
 package at.ac.tuwien.rep;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.websocket.server.PathParam;
+import net.sf.dynamicreports.report.exception.DRException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +38,8 @@ import at.ac.tuwien.rep.dto.ResourcesDTO;
 import at.ac.tuwien.rep.model.ResourceNomination;
 import at.ac.tuwien.rep.model.ResourceNominationAssociation;
 import at.ac.tuwien.rep.model.ResourceRegion;
+import at.ac.tuwien.rep.report.Report;
+import at.ac.tuwien.rep.report.ReportGenerator;
 
 @RestController
 @RequestMapping(path="/api/")
@@ -87,12 +96,12 @@ public class MainController {
 
 	@CrossOrigin
 	@RequestMapping(path="/nominations/{nominationId}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResourceNominationDTO getNomination(@PathVariable("nominationId") Long nominationId) {
-		ResourceNomination nomination = nominationRepository.getOne(nominationId);
+	public ResponseEntity<?> getNomination(@PathVariable("nominationId") Long nominationId) {
+		ResourceNomination nomination = nominationRepository.findOne(nominationId);
 		if(nomination == null) {
-			//TODO throw exception for 404
+			return ResponseEntity.notFound().build();
 		}
-		return transformer.transform(nomination);
+		return ResponseEntity.ok().body(transformer.transform(nomination));
 	}
 
 	@CrossOrigin
@@ -118,8 +127,6 @@ public class MainController {
 		association.setNominations(request.getNominations().stream().map(n -> transformer.transform(n)).collect(Collectors.toList()));
 		final ResourceNominationAssociation managedAssociation = nominationAssociationRepository.save(association);
 		List<Long> ids = association.getNominations().stream().map(n -> {n.setAssociation(managedAssociation); n.setMatchedNominations(new ArrayList<>()); return n;}).map(n -> nominationRepository.save(n).getId()).collect(Collectors.toList());
-		//		Thread matchingThread = new Thread(new NominationMatcher.NominationMatcherThread(nominationMatcher));
-		//		matchingThread.start();
 		new NominationMatcher.NominationMatcherThread(nominationMatcher).run();
 		return ids;
 	}
@@ -139,27 +146,16 @@ public class MainController {
 		region.setName(regionName);
 		return regionRepository.save(region).getId();
 	}
-
-	@RequestMapping(path="/resources/{resourceId}", method= RequestMethod.POST, consumes={"application/xml", "application/rdf+xml"})
-	public String addResourceAllocations(@PathParam("resourceId") String resourceId) {
-		return "";
+	
+	@RequestMapping(value="/reports", method=RequestMethod.GET, produces = "application/pdf")
+	public ResponseEntity<InputStreamSource> getReport(@RequestParam(name="type", required=false) String type) throws IOException, DRException {
+		Report report = ReportGenerator.createReport(type, nominationRepository.findAll());
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("content-disposition", "attachment; filename=ResourceReport_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd_HH:mm:ss")) + ".pdf");
+		responseHeaders.setContentType(MediaType.parseMediaType("application/pdf"));
+		return ResponseEntity.ok().contentLength(report.getContentLength()).contentType(
+				MediaType.APPLICATION_OCTET_STREAM)
+				.headers(responseHeaders)
+				.body(new InputStreamResource(report.getReportStream()));
 	}
-
-	@RequestMapping(value="/rdf", method=RequestMethod.GET, produces={"application/xml", "application/rdf+xml"})
-	public String getModelAsXml() {
-		// Note that we added "application/rdf+xml" as one of the supported types
-		// for this method. Otherwise, we utilize your existing xml serialization
-		return "";
-	}
-
-	/*
-	 * <?xml version="1.0"?>
-<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns:dc="http://purl.org/dc/elements/1.1/">
-  <rdf:Description rdf:about="http://www.w3.org/">
-    <dc:title>World Wide Web Consortium</dc:title> 
-  </rdf:Description>
-</rdf:RDF>
-
-	 */
 }

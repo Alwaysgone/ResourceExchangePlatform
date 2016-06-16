@@ -12,6 +12,7 @@ import at.ac.tuwien.rep.dao.ResourceRegionRepository;
 import at.ac.tuwien.rep.model.ResourceDirection;
 import at.ac.tuwien.rep.model.ResourceNomination;
 import at.ac.tuwien.rep.model.ResourceRegion;
+import at.ac.tuwien.rep.report.ReportModel;
 
 @Component
 public class DTOTransformer {

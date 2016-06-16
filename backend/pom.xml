@@ -15,7 +15,6 @@
 		<org.springframework.boot.version>1.3.5.RELEASE</org.springframework.boot.version>
 		<org.apache.maven.plugins.version>3.5.1</org.apache.maven.plugins.version>
 		<com.spotify.version>0.2.3</com.spotify.version>
-		<org.apache.jena.version>3.1.0</org.apache.jena.version>
 		<tec.units.version>0.8</tec.units.version>
 		<org.postgresql.version>9.4-1206-jdbc42</org.postgresql.version>
 		<net.sourceforge.dynamicreports.version>4.1.0</net.sourceforge.dynamicreports.version>
@@ -60,7 +59,11 @@
 				<artifactId>postgresql</artifactId>
 				<version>${org.postgresql.version}</version>
 			</dependency>
-<!-- 			http://www.dynamicreports.org/ -->
+			<dependency>
+				<groupId>xml-apis</groupId>
+				<artifactId>xml-apis</artifactId>
+				<version>1.4.01</version>
+			</dependency>
 			<dependency>
 				<groupId>net.sourceforge.dynamicreports</groupId>
 				<artifactId>dynamicreports-core</artifactId>
@@ -76,13 +79,6 @@
 				<artifactId>dynamicreports-googlecharts</artifactId>
 				<version>${net.sourceforge.dynamicreports.version}</version>
 			</dependency>
-
-			<!-- <dependency> -->
-			<!-- <groupId>org.apache.jena</groupId> -->
-			<!-- <artifactId>jena-core</artifactId> -->
-			<!-- <version>${org.apache.jena.version}</version> -->
-			<!-- </dependency> -->
-
 		</dependencies>
 	</dependencyManagement>
 
@@ -95,10 +91,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<!-- <dependency> -->
-		<!-- <groupId>org.springframework.boot</groupId> -->
-		<!-- <artifactId>spring-boot-starter-data-mongodb</artifactId> -->
-		<!-- </dependency> -->
 		<dependency>
 			<groupId>net.sourceforge.dynamicreports</groupId>
 			<artifactId>dynamicreports-core</artifactId>
@@ -110,12 +102,6 @@
 		<dependency>
 			<groupId>net.sourceforge.dynamicreports</groupId>
 			<artifactId>dynamicreports-googlecharts</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>apache-jena-libs</artifactId>
-			<version>${org.apache.jena.version}</version>
-			<type>pom</type>
 		</dependency>
 		<dependency>
 			<groupId>tec.units</groupId>

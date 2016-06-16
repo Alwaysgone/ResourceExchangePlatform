@@ -6,7 +6,6 @@ import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(basePackages="at.ac.tuwien.rep")
 @EnableAutoConfiguration
-//@EnableMongoRepositories(basePackages="at.ac.tuwien.rep.dao")
 public class Main {
 	
 	public static void main(String[] args) {
