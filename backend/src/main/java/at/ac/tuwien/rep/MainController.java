@@ -63,11 +63,6 @@ public class MainController {
 		this.nominationMatcher = nominationMatcher;
 	}
 
-	@RequestMapping(method=RequestMethod.GET)
-	public String getHelloWorld() {
-		return "Hello World!";
-	}
-
 	@RequestMapping(path="/resources", method=RequestMethod.GET, produces=MediaType.TEXT_PLAIN_VALUE)
 	public String getNumberOfResources(@RequestParam(name="Name", required=false) List<String> resourceNames, @RequestParam(name="Direction", required=false) String direction) {
 		Set<String> resources = nominationRepository.findAll().stream().map(n -> n.getResource())
