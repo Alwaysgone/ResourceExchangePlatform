@@ -42,7 +42,7 @@ public class Application implements CommandLineRunner {
 
 	private String getBaseUrl() {
 		String baseUrl = "";
-		return (baseUrl = System.getProperty("participant") != null ? baseUrl : "http://192.168.99.100:8080/api");
+		return (baseUrl = System.getProperty("baseUrl") != null ? baseUrl : "http://192.168.99.100:8080/api");
 	}
 
 	private List<String> getResources() {
